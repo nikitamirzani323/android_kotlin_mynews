@@ -1,6 +1,8 @@
 package com.example.mynews.Activity.Pages
 
 import android.content.Context
+import android.content.Intent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import coil.compose.AsyncImage
+import com.example.mynews.Activity.Detail.NewsDetailActivity
 import com.example.mynews.Model.Article
 import com.example.mynews.ViewModel.NewsViewModel
 
@@ -51,13 +54,23 @@ fun ShowSearch(viewModel: NewsViewModel){
 
 @Composable
 fun ShowNewsList(article:List<Article>,viewModel: NewsViewModel){
+    val context = LocalContext.current
     Column {
         ShowSearch(viewModel = viewModel)
         LazyColumn {
             items(article){
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.clickable {
+                        val intent = Intent(context,NewsDetailActivity::class.java).apply {
+                            putExtra("url",it.url)
+                            putExtra("title",it.title)
+                            putExtra("description",it.description)
+                            putExtra("image",it.image)
+                        }
+                        context.startActivity(intent)
+                    }
                 ) {
                     AsyncImage(
                         model = it.image,
