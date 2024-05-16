@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -32,9 +33,11 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mynews.Activity.Pages.FavouritePage
 import com.example.mynews.Activity.Pages.HomePage
 import com.example.mynews.Model.BottomNavigationItem
+import com.example.mynews.ViewModel.NewsViewModel
 import com.example.mynews.ui.theme.MynewsTheme
 
 class MainActivity : ComponentActivity() {
+    val viewModel:NewsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -100,7 +103,7 @@ class MainActivity : ComponentActivity() {
                 startDestination = "Home"
             ) {
                 composable("Home"){
-                    HomePage()
+                    HomePage(viewModel = viewModel)
                 }
                 composable("Favourite"){
                     FavouritePage()

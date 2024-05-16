@@ -1,7 +1,6 @@
 package com.example.mynews.Model
 
 data class Article(
-    val content: String,
     val description: String,
     val image: String,
     val publishedAt: String,
