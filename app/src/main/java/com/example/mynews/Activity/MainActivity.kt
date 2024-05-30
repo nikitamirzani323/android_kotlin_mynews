@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,6 +39,7 @@ import com.example.mynews.ui.theme.MynewsTheme
 
 class MainActivity : ComponentActivity() {
     val viewModel:NewsViewModel by viewModels()
+    val newsViewModel:com.example.mynews.Room.ViewModel.NewsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -54,6 +56,7 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
     @Preview(showBackground = true)
@@ -88,11 +91,12 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(item.title)
                             },
                             icon = {
-                                Icon(imageVector = if(indexItem==index){
-                                    item.selectedItem
-                                }else item.unselectedItem,
-                                    contentDescription = item.title)
-
+                                BadgedBox(badge = {}) {
+                                    Icon(imageVector = if(index==indexItem){
+                                        item.selectedItem
+                                    }else item.unselectedItem,
+                                        contentDescription = item.title)
+                                }
                             })
                     }
                 }
@@ -106,7 +110,7 @@ class MainActivity : ComponentActivity() {
                     HomePage(viewModel = viewModel)
                 }
                 composable("Favourite"){
-                    FavouritePage()
+                    FavouritePage(newsViewModel)
                 }
             }
         }

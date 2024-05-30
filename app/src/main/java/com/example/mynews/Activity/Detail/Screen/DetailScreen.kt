@@ -8,24 +8,55 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.mynews.Activity.Detail.Component.DetailTopBar
+import com.example.mynews.Prefrence.NewsPreferences
+import com.example.mynews.Room.Entity.NewsFavourite
+import com.example.mynews.Room.ViewModel.NewsViewModel
 
 @Composable
 fun NewsDetailScreen(
-    activity : Activity
+    activity : Activity,
+    viewModel : NewsViewModel
 ){
+    val context = LocalContext.current
     val url = activity.intent.getStringExtra("url")?:""
     val image = activity.intent.getStringExtra("image")?:""
     val title = activity.intent.getStringExtra("title")?:""
     val description = activity.intent.getStringExtra("description")?:""
+    val sourceName = activity.intent.getStringExtra("source_name")?:""
+    val publishedName = activity.intent.getStringExtra("published")?:""
+    var isNews by remember {
+        mutableStateOf(NewsPreferences.getSharedPrefrences(context,title))
+    }
+    val favouriteIcon = if(isNews){
+        Icons.Default.Favorite
+    }else{
+        Icons.Default.FavoriteBorder
+    }
+    val newsFavourite = NewsFavourite(
+        title = title,
+        description = description,
+        image = image,
+        url = url,
+        sourceName =sourceName,
+        publish_Date = publishedName,
+    )
     Column {
         DetailTopBar(
             onBackClick = {
@@ -43,7 +74,16 @@ fun NewsDetailScreen(
                 val shareIntent = Intent.createChooser(intent,null)
                 activity.startActivity(shareIntent)
             },
-            onFavouriteClick = {}
+            onFavouriteClick = {
+                isNews = !isNews
+                NewsPreferences.SaveSahredPrefences(context,title,isNews)
+                if(isNews){
+                    viewModel.InsertNews(newsFavourite = newsFavourite)
+                }else{
+                    viewModel.deleteNews(url)
+                }
+            },
+            FavouriteIcon = favouriteIcon
         )
         NewsContent(image = image, title = title, description = description)
     }

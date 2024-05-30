@@ -15,6 +15,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,7 +28,8 @@ fun DetailTopBar(
     onFavouriteClick:()->Unit,
     onShareClick:()->Unit,
     onBrowserClick:()->Unit,
-    onBackClick:()->Unit
+    onBackClick:()->Unit,
+    FavouriteIcon: ImageVector
 ){
     TopAppBar(title = { /*TODO*/ },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
@@ -44,7 +46,7 @@ fun DetailTopBar(
         },
         actions = {
             IconButton(onClick = onFavouriteClick) {
-                Icon(imageVector = Icons.Default.Favorite,
+                Icon(imageVector = FavouriteIcon,
                     contentDescription = null,
                     modifier = Modifier.padding(10.dp))
             }
@@ -69,6 +71,7 @@ fun ShowTopAppBar(){
         onFavouriteClick = {},
         onShareClick = {},
         onBrowserClick = {},
-        onBackClick = {}
+        onBackClick = {},
+        FavouriteIcon = Icons.Default.Favorite
     )
 }

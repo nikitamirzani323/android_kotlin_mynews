@@ -68,6 +68,8 @@ fun ShowNewsList(article:List<Article>,viewModel: NewsViewModel){
                             putExtra("title",it.title)
                             putExtra("description",it.description)
                             putExtra("image",it.image)
+                            putExtra("source_name",it.source.name)
+                            putExtra("published",it.publishedAt)
                         }
                         context.startActivity(intent)
                     }
